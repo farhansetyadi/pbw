@@ -1,3 +1,3 @@
 $(document).ready(function () {
-    alert('tes');
+    alert('Ikan Hiu Makan Tomat');
 });
