@@ -1,3 +1,3 @@
-$(document).ready(function () {
-    alert('Ikan Hiu Makan Tomat');
-});
+// $(document).ready(function () {
+//    alert('Ikan Hiu Makan Tomat');
+// });
