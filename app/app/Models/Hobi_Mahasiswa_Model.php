@@ -2,14 +2,14 @@
 
 use CodeIgniter\Model;
 
-class Hobi_Model extends Model {
-    protected $table      = 'hobi';
-    protected $primaryKey = 'kode_hobi';
+class Hobi_Mahasiswa_Model extends Model {
+    protected $table      = 'hobi_mahasiswa';
+    protected $primaryKey = 'kode_hobi_mahasiswa';
 
     protected $returnType     = 'object';
     protected $useSoftDeletes = false;
 
-    protected $allowedFields = ['kode_hobi', 'hobi'];
+    protected $allowedFields = ['kode_hobi_mahasiswa', 'kode_hobi', 'nim'];
 
     protected $useTimestamps = false;
     protected $createdField  = 'created_at';

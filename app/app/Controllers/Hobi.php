@@ -8,14 +8,12 @@ class Hobi extends BaseController {
     public function __construct() {
         $this->session = \Config\Services::session();
 
-        $db = \Config\Database::connect();
-
-        $this->hobi = new Hobi_Model($db);
+        $this->hobiModel = new Hobi_Model();
     }
 
     public function index() {
         $data['session'] = $this->session->getFlashdata('response');
-        $data['dataHobi'] = $this->hobi->get()->getResult();
+        $data['dataHobi'] = $this->hobiModel->findAll();
 
         echo view('header_v');
         echo view('hobi_v', $data);
@@ -29,9 +27,7 @@ class Hobi extends BaseController {
     }
 
     public function edit($id) {
-        $where = ['kode_hobi' => $id];
-
-        $data['dataHobi'] = $this->hobi->get($where)->getResult()[0];
+        $data['dataHobi'] = $this->hobiModel->find($id);
         
         echo view('header_v');
         echo view('hobi_form_v', $data);
@@ -40,24 +36,24 @@ class Hobi extends BaseController {
 
     public function save() {
         $data = [
-            'hobi' => $this->request->getPost('hobi'),
+            'kode_hobi' => $this->request->getPost('kode'),
+            'hobi' => $this->request->getPost('hobi')
         ];
-        // var_dump($data);die;
 
         $id = $this->request->getPost('id');
 
         if (empty($id)) { //Insert
-            $response = $this->hobi->insert($data);
+            $response = $this->hobiModel->insert($data);
 
-            if ($response->resultID) {
-                $this->session->setFlashdata('response', ['status' => $response->resultID, 'message' => 'Data berhasil disimpan.']);
+            if ($response) {
+                $this->session->setFlashdata('response', ['status' => $response, 'message' => 'Data berhasil disimpan.']);
             } else {
-                $this->session->setFlashdata('response', ['status' => $response->resultID, 'message' => 'Data gagal disimpan. '. $response->connID->error]);
+                $this->session->setFlashdata('response', ['status' => $response, 'message' => 'Data gagal disimpan.']);
             }
         } else { // Update
             $where = ['kode_hobi' => $id];
 
-            $response = $this->hobi->update($data, $where);
+            $response = $this->hobiModel->update($where, $data);
             
             if ($response) {
                 $this->session->setFlashdata('response', ['status' => $response, 'message' => 'Data berhasil disimpan.']);
@@ -70,16 +66,15 @@ class Hobi extends BaseController {
     }
 
     public function delete($id) {
-        $where = ['kode_hobi' => $id];
-
-        $response = $this->hobi->delete($where);
+        $response = $this->hobiModel->delete($id);
         
-        if ($response->resultID) {
-            $this->session->setFlashdata('response', ['status' => $response->resultID, 'message' => 'Data berhasil dihapus.']);
+        if ($response) {
+            $this->session->setFlashdata('response', ['status' => $response, 'message' => 'Data berhasil dihapus.']);
         } else {
-            $this->session->setFlashdata('response', ['status' => $response->resultID, 'message' => 'Data gagal dihapus. '. $response->connID->error]);
+            $this->session->setFlashdata('response', ['status' => $response, 'message' => 'Data gagal dihapus.']);
         }
 
         return redirect()->to(site_url('Hobi'));
     }
+
 }

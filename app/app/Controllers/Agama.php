@@ -8,14 +8,12 @@ class Agama extends BaseController {
     public function __construct() {
         $this->session = \Config\Services::session();
 
-        $db = \Config\Database::connect();
-
-        $this->prodi = new Agama_Model($db);
+        $this->agamaModel = new Agama_Model();
     }
 
     public function index() {
         $data['session'] = $this->session->getFlashdata('response');
-        $data['dataAgama'] = $this->prodi->get()->getResult();
+        $data['dataAgama'] = $this->agamaModel->findAll();
 
         echo view('header_v');
         echo view('agama_v', $data);
@@ -29,9 +27,7 @@ class Agama extends BaseController {
     }
 
     public function edit($id) {
-        $where = ['kode_agama' => $id];
-
-        $data['dataAgama'] = $this->prodi->get($where)->getResult()[0];
+        $data['dataAgama'] = $this->agamaModel->find($id);
         
         echo view('header_v');
         echo view('agama_form_v', $data);
@@ -40,24 +36,24 @@ class Agama extends BaseController {
 
     public function save() {
         $data = [
-            'agama' => $this->request->getPost('agama'),
+            'kode_agama' => $this->request->getPost('kode'),
+            'agama' => $this->request->getPost('agama')
         ];
-        // var_dump($data);die;
 
         $id = $this->request->getPost('id');
 
         if (empty($id)) { //Insert
-            $response = $this->prodi->insert($data);
+            $response = $this->agamaModel->insert($data);
 
-            if ($response->resultID) {
-                $this->session->setFlashdata('response', ['status' => $response->resultID, 'message' => 'Data berhasil disimpan.']);
+            if ($response) {
+                $this->session->setFlashdata('response', ['status' => $response, 'message' => 'Data berhasil disimpan.']);
             } else {
-                $this->session->setFlashdata('response', ['status' => $response->resultID, 'message' => 'Data gagal disimpan. '. $response->connID->error]);
+                $this->session->setFlashdata('response', ['status' => $response, 'message' => 'Data gagal disimpan.']);
             }
         } else { // Update
             $where = ['kode_agama' => $id];
 
-            $response = $this->prodi->update($data, $where);
+            $response = $this->agamaModel->update($where, $data);
             
             if ($response) {
                 $this->session->setFlashdata('response', ['status' => $response, 'message' => 'Data berhasil disimpan.']);
@@ -70,16 +66,15 @@ class Agama extends BaseController {
     }
 
     public function delete($id) {
-        $where = ['kode_agama' => $id];
-
-        $response = $this->prodi->delete($where);
+        $response = $this->agamaModel->delete($id);
         
-        if ($response->resultID) {
-            $this->session->setFlashdata('response', ['status' => $response->resultID, 'message' => 'Data berhasil dihapus.']);
+        if ($response) {
+            $this->session->setFlashdata('response', ['status' => $response, 'message' => 'Data berhasil dihapus.']);
         } else {
-            $this->session->setFlashdata('response', ['status' => $response->resultID, 'message' => 'Data gagal dihapus. '. $response->connID->error]);
+            $this->session->setFlashdata('response', ['status' => $response, 'message' => 'Data gagal dihapus.']);
         }
 
         return redirect()->to(site_url('Agama'));
     }
+
 }

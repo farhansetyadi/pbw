@@ -23,7 +23,7 @@
                 <thead class="thead-light">
                     <tr>
                         <th width="170">Aksi</th>
-                        <th>Kode Agama</th>
+                        <th>Kode</th>
                         <th>Agama</th>
                     </tr>
                 </thead>
@@ -51,7 +51,7 @@
                     ?>
 
                     <tr>
-                        <td colspan="4" class="text-center">Tidak ada data</td>
+                        <td colspan="3" class="text-center">Tidak ada data</td>
                     </tr>
 
                     <?php } ?>

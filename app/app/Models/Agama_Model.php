@@ -1,32 +1,22 @@
 <?php namespace App\Models;
 
-use CodeIgniter\Database\ConnectionInterface;
+use CodeIgniter\Model;
 
-class Agama_Model {
+class Agama_Model extends Model {
+    protected $table      = 'agama';
+    protected $primaryKey = 'kode_agama';
 
-    private $table = 'agama';
+    protected $returnType     = 'object';
+    protected $useSoftDeletes = false;
 
-    public function __construct(ConnectionInterface &$db) {
-        $this->builder = $db->table($this->table);
-    }
+    protected $allowedFields = ['kode_agama', 'agama'];
 
-    public function get($where = null) {
-        if (!empty($where))
-            return $this->builder->getWhere($where);
-        else
-            return $this->builder->get();
-    }
+    protected $useTimestamps = false;
+    protected $createdField  = 'created_at';
+    protected $updatedField  = 'updated_at';
+    protected $deletedField  = 'deleted_at';
 
-    public function insert($data) {
-        return $this->builder->insert($data);
-    }
-
-    public function update($data, $where) {
-        return $this->builder->update($data, $where);
-    }
-
-    public function delete($where) {
-        return $this->builder->delete($where);
-    }
-
+    protected $validationRules    = [];
+    protected $validationMessages = [];
+    protected $skipValidation     = false;
 }
