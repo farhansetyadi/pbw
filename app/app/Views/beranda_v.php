@@ -40,7 +40,35 @@
 
     <section class="my-4">
         <div class="container">
-            <h2>Beranda</h2>
-            <p>Tes</p>
+            <h2>Login</h2>
+            <?php if (!empty($session)) { ?>
+
+            <div class="alert alert-<?php echo $session['status'] ? 'success' : 'danger'; ?> alert-dismissible fade show" role="alert">
+                <?php echo $session['message']; ?>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <?php } ?>
+
+            <?php if(!empty($isLogin)){
+            ?>  
+            <a href="<?php echo site_url("Beranda/Logout")?>" class="btn btn-danger btn-sm">Logout</a>  
+            <?php
+            }else{
+            ?>
+            <form method="POST" action="<?php echo site_url('Beranda/Login') ?>">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" required aria-describedby="emailHelp">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" name="password" required id="password">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            <?php }?>
         </div>
     </section>

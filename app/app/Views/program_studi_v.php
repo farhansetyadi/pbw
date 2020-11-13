@@ -13,16 +13,26 @@
             </div>
 
             <?php } ?>
+
+            <?php
+                if (!empty($isLogin)){
+            ?> 
             
             <p>
                 <a href="<?php echo site_url('Program_Studi/add'); ?>" class="btn btn-primary btn-sm">
                     <i class="fa fa-plus"></i> Tambah
                 </a>
             </p>
+
+            <?php }?>
             <table class="table table-striped table-bordered table-hover">
                 <thead class="thead-light">
                     <tr>
+                    <?php
+                        if (!empty($isLogin)){
+                    ?> 
                         <th width="170">Aksi</th>
+                    <?php }?>
                         <th>Kode</th>
                         <th>Program Studi</th>
                         <th>Ketua</th>
@@ -33,6 +43,9 @@
                     <?php foreach ($dataProdi as $row) : ?>
 
                     <tr>
+                    <?php
+                        if (!empty($isLogin)){
+                    ?> 
                         <th>
                             <a href="<?php echo site_url('Program_Studi/edit/'.$row->kode_prodi); ?>" class="btn btn-warning btn-sm">
                                 <i class="fa fa-pencil"></i> Ubah
@@ -41,11 +54,13 @@
                                 <i class="fa fa-trash"></i> Hapus
                             </a>
                         </th>
+                    <?php }?>
                         <td><?php echo $row->kode_prodi; ?></td>
                         <td><?php echo $row->nama_prodi; ?></td>
                         <td><?php echo $row->ketua_prodi; ?></td>
                     </tr>
 
+                    
                     <?php
                         endforeach;
 
