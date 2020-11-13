@@ -4,34 +4,25 @@
             <h2>Mahasiswa</h2>
             
             <?php if (!empty($session)) { ?>
-    
-                <div class="alert alert-<?php echo $session['status'] ? 'success' : 'danger'; ?> alert-dismissible fade show" role="alert">
-                    <?php echo $session['message']; ?>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
 
-                <?php } ?>
-            <?php
-                if (!empty($isLogin)){
-            ?> 
+            <div class="alert alert-<?php echo $session['status'] ? 'success' : 'danger'; ?> alert-dismissible fade show" role="alert">
+                <?php echo $session['message']; ?>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <?php } ?>
+            
             <p>
                 <a href="<?php echo site_url('Mahasiswa/add'); ?>" class="btn btn-primary btn-sm">
                     <i class="fa fa-plus"></i> Tambah
                 </a>
             </p>
-            <?php
-                }
-            ?>
             <table class="table table-striped table-bordered table-hover">
                 <thead class="thead-light">
                     <tr>
-                    <?php
-                        if (!empty($isLogin)){
-                    ?> 
                         <th width="170">Aksi</th>
-                    <?php } ?>
                         <th>NIM</th>
                         <th>Nama</th>
                         <th>Jenis Kelamin</th>
@@ -43,9 +34,6 @@
                     <?php foreach ($dataMahasiswa as $row) : ?>
 
                     <tr>
-                    <?php
-                        if (!empty($isLogin)){
-                    ?> 
                         <th>
                             <a href="<?php echo site_url('Mahasiswa/edit/'.$row->nim); ?>" class="btn btn-warning btn-sm">
                                 <i class="fa fa-pencil"></i> Ubah
@@ -54,12 +42,10 @@
                                 <i class="fa fa-trash"></i> Hapus
                             </a>
                         </th>
-                    <?php } ?>
                         <td><?php echo $row->nim; ?></td>
                         <td><?php echo $row->nama; ?></td>
                         <td><?php echo $row->jenis_kelamin; ?></td>
                         <td><?php echo $row->agama; ?></td>
-
                     </tr>
 
                     <?php

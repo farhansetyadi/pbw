@@ -10,34 +10,30 @@ class Program_Studi extends BaseController {
 
         $db = \Config\Database::connect();
 
-        $this->prodi = new Program_Studi_Model($db);
+        $this->prodiModel = new Program_Studi_Model($db);
     }
 
     public function index() {
-        $data['segment'] = $this->segment;
         $data['session'] = $this->session->getFlashdata('response');
-        $data['isLogin'] = $this->session->get('username');
-        $data['dataProdi'] = $this->prodi->get()->getResult();
+        $data['dataProdi'] = $this->prodiModel->get()->getResult();
 
-        echo view('header_v',$data);
+        echo view('header_v');
         echo view('program_studi_v', $data);
         echo view('footer_v');
     }
 
     public function add() {
-        $data['segment'] = $this->segment;
-        echo view('header_v',$data);
+        echo view('header_v');
         echo view('program_studi_form_v');
         echo view('footer_v');
     }
 
     public function edit($id) {
-        $data['segment'] = $this->segment;
         $where = ['kode_prodi' => $id];
 
-        $data['dataProdi'] = $this->prodi->get($where)->getResult()[0];
+        $data['dataProdi'] = $this->prodiModel->get($where)->getResult()[0];
         
-        echo view('header_v',$data);
+        echo view('header_v');
         echo view('program_studi_form_v', $data);
         echo view('footer_v');
     }
@@ -52,7 +48,7 @@ class Program_Studi extends BaseController {
         $id = $this->request->getPost('id');
 
         if (empty($id)) { //Insert
-            $response = $this->prodi->insert($data);
+            $response = $this->prodiModel->insert($data);
 
             if ($response->resultID) {
                 $this->session->setFlashdata('response', ['status' => $response->resultID, 'message' => 'Data berhasil disimpan.']);
@@ -62,7 +58,7 @@ class Program_Studi extends BaseController {
         } else { // Update
             $where = ['kode_prodi' => $id];
 
-            $response = $this->prodi->update($data, $where);
+            $response = $this->prodiModel->update($data, $where);
             
             if ($response) {
                 $this->session->setFlashdata('response', ['status' => $response, 'message' => 'Data berhasil disimpan.']);
@@ -77,7 +73,7 @@ class Program_Studi extends BaseController {
     public function delete($id) {
         $where = ['kode_prodi' => $id];
 
-        $response = $this->prodi->delete($where);
+        $response = $this->prodiModel->delete($where);
         
         if ($response->resultID) {
             $this->session->setFlashdata('response', ['status' => $response->resultID, 'message' => 'Data berhasil dihapus.']);

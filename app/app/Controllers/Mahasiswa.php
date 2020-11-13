@@ -2,55 +2,52 @@
 namespace App\Controllers;
 
 use CodeIgniter\Database\ConnectionInterface;
-use App\Models\{Mahasiswa_Model,Agama_Model,Hobi_Model,Hobi_Mahasiswa_Model};
+
+use App\Models\Agama_Model;
+use App\Models\Hobi_Model;
+use App\Models\Hobi_Mahasiswa_Model;
+use App\Models\Mahasiswa_Model;
 
 class Mahasiswa extends BaseController {
 
-    public function __construct() 
-    {
+    public function __construct() {
+        $this->session = \Config\Services::session();
         $this->db = \Config\Database::connect();
-        $this->session = \Config\Services::session();  
-        $this->mahasiswaModel =  new Mahasiswa_Model(); 
-        $this->agamaModel =  new Agama_Model();  
-        $this->hobiModel =  new Hobi_Model();
-        $this->hobimahasiswaModel =  new Hobi_Mahasiswa_Model();      
+
+        $this->agamaModel = new Agama_Model();
+        $this->hobiModel = new Hobi_Model();
+        $this->hobimahasiswaModel = new Hobi_Mahasiswa_Model();
+        $this->mahasiswaModel = new Mahasiswa_Model();
     }
 
-    public function index() 
-    {
+    public function index() {
         $data['session'] = $this->session->getFlashdata('response');
-        $data['dataMahasiswa'] = $this->mahasiswaModel->findAll();
-        $data['segment'] = $this->segment;
-        $data['isLogin'] = $this->session->get('username');
         $data['dataMahasiswa'] = $this->mahasiswaModel->get($this->db)->getResult();
-        
-        // dd($data);
-        echo view('header_v',$data);
+
+        echo view('header_v');
         echo view('mahasiswa_v', $data);
         echo view('footer_v');
     }
 
     public function add() {
-        $data['segment'] = $this->segment;
         $data['dataAgama'] = $this->agamaModel->findAll();
         $data['dataHobi'] = $this->hobiModel->findAll();
-        echo view('header_v',$data);
-        echo view('mahasiswa_form_v',$data);
+
+        echo view('header_v');
+        echo view('mahasiswa_form_v', $data);
         echo view('footer_v');
     }
 
-    public function edit($id) 
-    {
+    public function edit($id) {
         $data['dataAgama'] = $this->agamaModel->findAll();
         $data['dataHobi'] = $this->hobiModel->findAll();
         $data['dataMahasiswa'] = $this->mahasiswaModel->find($id);
-        $data['segment'] = $this->segment;
 
         foreach ($this->hobimahasiswaModel->where('nim', $id)->findAll() as $row) :
             $data['dataHobiMahasiswa'][] = $row->kode_hobi;
         endforeach;
-
-        echo view('header_v',$data);
+        
+        echo view('header_v');
         echo view('mahasiswa_form_v', $data);
         echo view('footer_v');
     }
@@ -64,7 +61,7 @@ class Mahasiswa extends BaseController {
             'nim' => $nim,
             'nama' => $this->request->getPost('nama'),
             'jenis_kelamin' => $this->request->getPost('jenis_kelamin'),
-            'kode_agama' => $this->request->getPost('agama'),
+            'kode_agama' => $this->request->getPost('kode_agama'),
             'alamat' => $this->request->getPost('alamat'),
             'tempat_lahir' => $this->request->getPost('tempat_lahir'),
             'tanggal_lahir' => $this->request->getPost('tanggal_lahir'),
@@ -132,17 +129,16 @@ class Mahasiswa extends BaseController {
         return redirect()->to(site_url('Mahasiswa'));
     }
 
-    public function delete($id) 
-    {
-
+    public function delete($id) {
         $response = $this->mahasiswaModel->delete($id);
         
         if ($response) {
-            $this->session->setFlashdata('response', ['status' => $response->resultID, 'message' => 'Data berhasil dihapus.']);
+            $this->session->setFlashdata('response', ['status' => $response, 'message' => 'Data berhasil dihapus.']);
         } else {
-            $this->session->setFlashdata('response', ['status' => $response->resultID, 'message' => 'Data gagal dihapus. ']);
+            $this->session->setFlashdata('response', ['status' => $response, 'message' => 'Data gagal dihapus.']);
         }
 
         return redirect()->to(site_url('Mahasiswa'));
     }
+
 }

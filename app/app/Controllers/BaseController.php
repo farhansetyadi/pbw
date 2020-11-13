@@ -15,7 +15,6 @@ namespace App\Controllers;
  */
 
 use CodeIgniter\Controller;
-use \CodeIgniter\HTTP\URI;
 
 class BaseController extends Controller
 {
@@ -28,7 +27,6 @@ class BaseController extends Controller
 	 * @var array
 	 */
 	protected $helpers = [];
-	
 
 	/**
 	 * Constructor.
@@ -43,8 +41,6 @@ class BaseController extends Controller
 		//--------------------------------------------------------------------
 		// E.g.:
 		// $this->session = \Config\Services::session();
-		$uri = new URI(current_url(true));
-		$this->segment = $uri->getSegment(1);  
 	}
-	
+
 }
