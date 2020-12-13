@@ -12,7 +12,7 @@ class Program_Studi_Model {
 
     public function get($where = null) {
         if (!empty($where))
-        return $this->builder->getWhere($where);
+            return $this->builder->getWhere($where);
         else
             return $this->builder->get();
     }
